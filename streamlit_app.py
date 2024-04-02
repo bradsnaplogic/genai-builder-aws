@@ -11,7 +11,7 @@ def typewriter(text: str, speed: int):
         time.sleep(1 / speed)
 
 st.set_page_config(page_title="GenAI Builder - Chatbot")
-st.title("ChatBot")
+st.title("Your Enterprise AI Assistant")
 
 # Initialize chat history
 if "messages" not in st.session_state:
