@@ -1,40 +1,57 @@
-import altair as alt
-import numpy as np
-import pandas as pd
 import streamlit as st
+import requests
+import time
 
-"""
-# Welcome to Streamlit!
+def typewriter(text: str, speed: int):
+    tokens = text.split()
+    container = st.empty()
+    for index in range(len(tokens) + 1):
+        curr_full_text = " ".join(tokens[:index])
+        container.markdown(curr_full_text)
+        time.sleep(1 / speed)
 
-Edit `/streamlit_app.py` to customize this app to your heart's desire :heart:.
-If you have any questions, checkout our [documentation](https://docs.streamlit.io) and [community
-forums](https://discuss.streamlit.io).
+st.set_page_config(page_title="GenAI Builder - Chatbot")
+st.title("ChatBot")
 
-In the meantime, below is an example of what you can do with just a few lines of code:
-"""
+# Initialize chat history
+if "messages" not in st.session_state:
+    st.session_state.messages = []
 
-num_points = st.slider("Number of points in spiral", 1, 10000, 1100)
-num_turns = st.slider("Number of turns in spiral", 1, 300, 31)
+# Display chat messages from history on app rerun
+for message in st.session_state.messages:
+    with st.chat_message(message["role"]):
+        st.markdown(message["content"])
 
-indices = np.linspace(0, 1, num_points)
-theta = 2 * np.pi * num_turns * indices
-radius = indices
+# React to user input
+prompt = st.chat_input("Ask me anything related to SnapLogic")
+if prompt:
+    st.chat_message("user").markdown(prompt)
+    # Add user message to chat history
+    st.session_state.messages.append({"role": "user", "content": prompt})
 
-x = radius * np.cos(theta)
-y = radius * np.sin(theta)
+    URL = 'https://snapgpt.labs.snaplogicdev.com/api/1/rest/slsched/feed/snaplogic/projects/Brad%20Drysdale/GenAI_Builder_Custom_Query'
+    BEARER_TOKEN ='bvJMyNOkpYB10PQ0v55hPJCXXUxWv3NU'
 
-df = pd.DataFrame({
-    "x": x,
-    "y": y,
-    "idx": indices,
-    "rand": np.random.randn(num_points),
-})
+    data = {"prompt" : prompt}
 
-st.altair_chart(alt.Chart(df, height=700, width=700)
-    .mark_point(filled=True)
-    .encode(
-        x=alt.X("x", axis=None),
-        y=alt.Y("y", axis=None),
-        color=alt.Color("idx", legend=None, scale=alt.Scale()),
-        size=alt.Size("rand", legend=None, scale=alt.Scale(range=[1, 150])),
-    ))
+    headers = {
+        'Authorization': f'Bearer {BEARER_TOKEN}'
+    }
+    response = requests.post(
+        url=URL,
+        data=data,
+        headers=headers,
+        timeout=180,
+        verify=False
+    )
+
+    result = response.json()
+    #st.write(result)
+    response=result[0]['choices'][0]['message']['content']
+    # Display assistant response in chat message container
+    with st.chat_message("assistant"):
+        #st.markdown(response,unsafe_allow_html=True)
+        typewriter(text=response, speed=10)
+
+    # Add assistant response to chat history
+    st.session_state.messages.append({"role": "assistant", "content": response})
