@@ -10,7 +10,7 @@ def typewriter(text: str, speed: int):
         container.markdown(curr_full_text)
         time.sleep(1 / speed)
 
-st.set_page_config(page_title="GenAI Builder - Chatbot")
+st.set_page_config(page_title="GenAI Builder")
 st.title("Your Enterprise AI Assistant")
 
 # Initialize chat history
