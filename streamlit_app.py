@@ -23,7 +23,7 @@ for message in st.session_state.messages:
         st.markdown(message["content"])
 
 # React to user input
-prompt = st.chat_input("Ask me anything related to SnapLogic")
+prompt = st.chat_input("Go ahead and ask me something...")
 if prompt:
     st.chat_message("user").markdown(prompt)
     # Add user message to chat history
