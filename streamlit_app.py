@@ -11,7 +11,7 @@ def typewriter(text: str, speed: int):
         time.sleep(1 / speed)
 
 st.set_page_config(page_title="GenAI Builder")
-st.title("Your Enterprise AI Assistant")
+st.title("Your AWS AI Assistant")
 
 # Initialize chat history
 if "messages" not in st.session_state:
@@ -29,8 +29,8 @@ if prompt:
     # Add user message to chat history
     st.session_state.messages.append({"role": "user", "content": prompt})
 
-    URL = 'https://snapgpt.labs.snaplogicdev.com/api/1/rest/slsched/feed/snaplogic/projects/Brad%20Drysdale/GenAI_Builder_Custom_Query'
-    BEARER_TOKEN ='bvJMyNOkpYB10PQ0v55hPJCXXUxWv3NU'
+    URL = 'https://snapgpt.labs.snaplogicdev.com/api/1/rest/slsched/feed/snaplogic/projects/Brad%20Drysdale/AWS-Demo%20GenAI_Builder_Custom_Step%202%20-%20RAG%20Task'
+    BEARER_TOKEN ='MWJTYwabhSFjnKtRPMYr42waTrMouIrn'
 
     data = {"prompt" : prompt}
 
